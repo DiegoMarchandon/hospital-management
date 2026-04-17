@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
         PatientSeeder::class,
         ScheduleSeeder::class,
         AppointmentSeeder::class,
+        RolesAndPermissionsSeeder::class,
+        AssignRolesToUsersSeeder::class,
     ]);
 
         User::factory()->create([
