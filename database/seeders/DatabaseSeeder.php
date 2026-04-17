@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         SpecialtySeeder::class,
         DoctorSeeder::class,
         PatientSeeder::class,
+        ScheduleSeeder::class,
+        AppointmentSeeder::class,
     ]);
 
         User::factory()->create([
