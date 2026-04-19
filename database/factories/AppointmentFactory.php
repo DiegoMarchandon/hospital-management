@@ -21,14 +21,17 @@ class AppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'doctor_id' => Doctor::inRandomOrder()->first()->id,
-            'patient_id' => Patient::inRandomOrder()->first()->id,
-            'schedule_id' => Schedule::inRandomOrder()->first()->id,
-            'appointment_date' => fake()->date(),
+            // 'doctor_id' => Doctor::inRandomOrder()->first()->id,
+            // 'patient_id' => Patient::inRandomOrder()->first()->id,
+            // 'schedule_id' => Schedule::inRandomOrder()->first()->id,
+            'doctor_id' => Doctor::factory()->create()->id,
+            'patient_id' => Patient::factory()->create()->id,
+            'schedule_id' => Schedule::factory()->create()->id,
+            'appointment_date' => fake()->dateTimeBetween('now','+30 days')->format('Y-m-d'),
             'appointment_time' => fake()->time('H:i:s'),
             'reason' => fake()->sentence(),
             'status' => fake()->randomElement(['pending', 'confirmed', 'cancelled', 'completed']),
-            'notes' => fake()->sentence(),
+            'notes' => fake()->paragraph(),
         ];
     }
 }

@@ -23,7 +23,10 @@ class DoctorFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->phoneNumber(),
             'license_number' => fake()->unique()->regexify('[A-Z]{2}[0-9]{6}'),
-            'specialty_id' => Specialty::inRandomOrder()->first()->id,
+            'specialty_id' => Specialty::firstOrCreate(
+                ['name' => fake()->word()],
+                ['description' => fake()->sentence()]
+            )->id,
             'bio' => fake()->sentence(),
         ];
     }

@@ -23,8 +23,16 @@ class Patient extends Model
     /**
      * Un paciente tiene varios turnos 
      */
-    public function appointment(): HasMany
+    public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Un paciente tiene medicalRecords (uno por cada cita)
+     */
+        public function medicalRecords():HasMany
+    {
+        return $this->hasMany(MedicalRecord::class);
     }
 }
