@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DoctorController;
+use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\AppointmentController;
 
@@ -16,6 +17,8 @@ Route::middleware('api')->group(function () {
     Route::middleware('role:doctor,admin')->group(function(){
         Route::post('/appointments',[AppointmentController::class, 'store']);
         Route::put('appointments/{id}',[AppointmentController::class, 'update']);
+        Route::post('/medical-records/{id}/upload',[DocumentController::class, 'upload']);
+        Route::get('/medical-records/{id}/documents',[DocumentController::class,'download']);
     });
 
     Route::middleware('role:admin')->group(function(){
