@@ -9,6 +9,20 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * User Model
+ * 
+ * @method bool hasRole(string|array $roles)
+ * @method bool hasAnyRole(string|array $roles)
+ * @method bool hasAllRoles(string|array $roles)
+ * @method bool hasPermissionTo(string $permission)
+ * @method \Illuminate\Support\Collection getRoleNames()
+ * @method void assignRole(string|array $roles)
+ * @method void removeRole(string|array $roles)
+ * @method void syncRoles(string|array $roles)
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany roles()
+ * @method \Illuminate\Database\Eloquent\Relations\BelongsToMany permissions()
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */

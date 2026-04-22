@@ -20,6 +20,10 @@ class Patient extends Model
         'city',
     ];
 
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
     /**
      * Un paciente tiene varios turnos 
      */

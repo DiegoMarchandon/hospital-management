@@ -15,32 +15,26 @@ class AssignRolesToUsersSeeder extends Seeder
      */
     public function run(): void
     {
-        // Asignar admin al Test User
-        $testUser = User::where('email','text@example.com')->first();
-        if($testUser){
-            $testUser->assignRole('admin');
+        // Assign admin role
+        $adminUser = User::where('email', 'admin@hospital.com')->first();
+        if ($adminUser) {
+            $adminUser->assignRole('admin');
         }
 
-        // Asignar role 'doctor' a cada Doctor
+        // Assign doctor role to all doctor users
+        for ($i = 1; $i <= 10; $i++) {
+            $user = User::where('email', "doctor_{$i}@hospital.com")->first();
+            if ($user) {
+                $user->assignRole('doctor');
+            }
+        }
 
-        Doctor::all()->each(function($doctor){
-            $user = User::create([
-                'name' => $doctor->name,
-                'email' => 'doctor_'.$doctor->id .'@hospital.com',
-                'password' => bcrypt('password'),
-            ]);
-            $user->assignRole('doctor');
-        });
-
-        // Asignar role 'patient' a cada Patient
-        Patient::all()->each(function($patient){
-            $user = User::create([
-                'name' => $patient->name,
-                'email' => 'patient_'.$patient->id.'@hospital.com',
-                'password' => bcrypt('password'),
-            ]);
-            $user->assignRole('patient');
-        });
-
+        // Assign patient role to all patient users
+        for ($i = 1; $i <= 20; $i++) {
+            $user = User::where('email', "patient_{$i}@hospital.com")->first();
+            if ($user) {
+                $user->assignRole('patient');
+            }
+        }
     }
 }

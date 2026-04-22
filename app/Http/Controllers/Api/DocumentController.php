@@ -26,8 +26,15 @@ class DocumentController extends Controller
 
         $medicalRecord = MedicalRecord::findOrFail($medicalRecordId);
 
-        // Guardar en storage/app/medical_documents/
-        $path = $request->file('document')->store('medical_documents');
+        // Guardamos el archivo en carpeta del record
+        // DESARROLLO (Local) Guardar en storage/app/medical_documents/
+        $path = $request->file('document')->store('medical_documents/{$medicalRecordId');
+
+        // PRODUCCIÓN (S3) - comentado, pero listo:
+        // $path = Storage::disk('s3')->putFile('medical_documents', $request->file('document));
+        
+        // Actualizamos el campo document_path en la BD
+        $medicalRecord->update(['document_path' => $path]);
 
         return response()->json([
             'success' => true,
@@ -41,8 +48,8 @@ class DocumentController extends Controller
         $medicalRecord = MedicalRecord::findOrFail($medicalRecordId);
 
         // En producción, aquí iría a S3
-        $documents = Storage::files('medical_documents');
-
+        $documents = Storage::files('medical_documents'); 
+        // $documents = Storage::disk('s3')->put('medical_documents/'.$filename, $file);
         return response()->json([
             'success' => true,
             'documents' => $documents,

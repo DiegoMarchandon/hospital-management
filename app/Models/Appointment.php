@@ -23,6 +23,10 @@ class Appointment extends Model
         'notes'
     ];
 
+    protected $casts = [
+        'appointment_date' => 'date',
+    ];
+
 
     /**
      * Una cita pertenece a un doctor
