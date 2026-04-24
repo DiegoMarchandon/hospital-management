@@ -86,18 +86,21 @@
                         <p class="text-sm text-gray-700 mt-2"><strong>Reason:</strong> {{ $appointment->reason }}</p>
                     @endif
                     <div class="mt-3 pt-3 border-t flex space-x-2">
-                        <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">View Details</button>
-                        @if($appointment->status !== 'cancelled')
-                            <button class="text-sm text-red-600 hover:text-red-800 font-medium">Cancel</button>
+                        <span class="text-sm text-gray-600">📍 {{ $appointment->appointment_date->isPast() ? 'Completed' : 'Upcoming' }}</span>
+                        @if($appointment->status !== 'cancelled' && !$appointment->appointment_date->isPast())
+                            <form action="{{ route('appointments.cancel', $appointment) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" onclick="return confirm('Are you sure?')" class="text-sm text-red-600 hover:text-red-800 font-medium">✕ Cancel</button>
+                            </form>
                         @endif
                     </div>
                 </div>
             @empty
                 <div class="text-center py-8 text-gray-500">
                     <p class="text-lg">No appointments scheduled</p>
-                    <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    <a href="{{ route('appointments.book.form') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                         Book an Appointment
-                    </button>
+                    </a>
                 </div>
             @endforelse
         </div>
@@ -147,12 +150,12 @@
         <div class="bg-blue-50 rounded-lg shadow p-6">
             <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
             <div class="space-y-2">
-                <button class="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">
+                <a href="{{ route('appointments.book.form') }}" class="block w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium text-center">
                     📅 Book Appointment
-                </button>
-                <button class="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 font-medium">
+                </a>
+                <a href="#medical-records" class="block w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 font-medium text-center">
                     📋 View Medical Records
-                </button>
+                </a>
                 <a href="{{ route('documents.upload.form') }}" class="block w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-medium text-center">
                     📤 Upload Document to S3
                 </a>

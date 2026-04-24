@@ -81,10 +81,33 @@
                         <p class="text-sm text-gray-700"><strong>Reason:</strong> {{ $appointment->reason }}</p>
                     @endif
                     <div class="mt-3 pt-3 border-t flex space-x-2">
-                        <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">View Patient</button>
-                        <button class="text-sm text-green-600 hover:text-green-800 font-medium">Confirm</button>
-                        <button class="text-sm text-red-600 hover:text-red-800 font-medium">Cancel</button>
+                        <span class="text-sm text-gray-600">📋 {{ $appointment->patient->email }}</span>
                     </div>
+                    @if($appointment->status === 'pending')
+                        <div class="mt-3 pt-3 border-t flex gap-2">
+                            <form action="{{ route('appointments.confirm', $appointment) }}" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full text-sm text-green-600 hover:text-green-800 font-medium bg-green-50 hover:bg-green-100 p-2 rounded">
+                                    ✓ Confirm
+                                </button>
+                            </form>
+                            <form action="{{ route('appointments.cancel', $appointment) }}" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full text-sm text-red-600 hover:text-red-800 font-medium bg-red-50 hover:bg-red-100 p-2 rounded">
+                                    ✕ Cancel
+                                </button>
+                            </form>
+                        </div>
+                    @elseif($appointment->status === 'confirmed')
+                        <div class="mt-3 pt-3 border-t">
+                            <form action="{{ route('appointments.complete', $appointment) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full text-sm text-green-600 hover:text-green-800 font-medium bg-green-50 hover:bg-green-100 p-2 rounded">
+                                    ✓ Mark as Completed
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             @empty
                 <div class="text-center py-8 text-gray-500">

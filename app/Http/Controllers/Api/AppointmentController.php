@@ -48,7 +48,45 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'doctor_id' => 'required|exists:doctors,id',
+                'appointment_date' => 'required|date|after_or_equal:today',
+                'appointment_time' => 'required|date_format:H:i',
+                'reason' => 'required|string|max:255',
+            ]);
+
+            $patient = \App\Models\Patient::where('email', auth()->user()->email)->first();
+
+            if (!$patient) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Patient profile not found',
+                ], 404);
+            }
+
+            $appointment = Appointment::create([
+                'patient_id' => $patient->id,
+                'doctor_id' => $validated['doctor_id'],
+                'appointment_date' => $validated['appointment_date'],
+                'appointment_time' => $validated['appointment_time'],
+                'reason' => $validated['reason'],
+                'status' => 'pending',
+            ]);
+
+            Cache::forget('appointments.all');
+
+            return response()->json([
+                'success' => true,
+                'data' => $appointment,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error' => get_class($e)
+            ], 500);
+        }
     }
 
 
@@ -57,7 +95,21 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $appointment = Appointment::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,cancelled,completed',
+        ]);
+
+        $appointment->update($validated);
+
+        Cache::forget('appointments.all');
+        Cache::forget("appointment.{$id}");
+
+        return response()->json([
+            'success' => true,
+            'data' => $appointment,
+        ]);
     }
 
     /**
